@@ -19,7 +19,8 @@ runs:
       run: |
           cd reviewdog
           git apply ${{ github.action_path }}/reviewdog.patch
-          GOBIN=/usr/local/bin sudo go install ./cmd/reviewdog
+          sudo go build -o /usr/local/bin/ ./cmd/reviewdog
     - name: Check reviewdog version
       shell: bash
-      run: reviewdog --version
+      run: |
+          reviewdog --version
