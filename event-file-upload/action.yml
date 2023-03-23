@@ -2,11 +2,12 @@ name: "Upload Event File"
 description: "Upload GitHub Event file to artifacts"
 runs:
   using: "composite"
-  shell: bash
   steps:
     - run: cp "$GITHUB_EVENT_PATH" ./event.json
+      shell: bash
     - name: Upload event file as artifact
       uses: actions/upload-artifact@v2
+      shell: bash
       with:
         name: event.json
         path: event.json

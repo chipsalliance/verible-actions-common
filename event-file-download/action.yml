@@ -2,12 +2,13 @@ name: "Download Event File"
 description: "Download GitHub Event file from artifacts"
 runs:
   using: "composite"
-  shell: bash
   steps:
     - uses: actions/checkout@v2
+      shell: bash
     - name: 'Download artifact'
       id: get-artifacts
       uses: actions/github-script@v3.1.0
+      shell: bash
       with:
         script: |
           var artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -27,4 +28,5 @@ runs:
           var fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/event.json.zip', Buffer.from(download.data));
     - run: |
+      shell: bash
         unzip event.json.zip
