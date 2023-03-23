@@ -2,6 +2,7 @@ name: "Download Event File"
 description: "Download GitHub Event file from artifacts"
 runs:
   using: "composite"
+  shell: bash
   steps:
     - uses: actions/checkout@v2
     - name: 'Download artifact'
