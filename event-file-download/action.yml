@@ -25,7 +25,7 @@ runs:
           });
           var fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/verible-trigger.json.zip', Buffer.from(download.data));
-    - run: |
-      shell: bash
+    - shell: bash
+      run: |
         unzip verible-trigger.json.zip
         mv verible-trigger.json event.json
