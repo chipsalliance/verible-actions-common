@@ -1,0 +1,27 @@
+name: "Install Verible"
+description: "Install Verible release"
+
+inputs:
+  verible_version:
+    description: 'Use selected Verible version (defaults to latest release)'
+    default: 'latest'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+          sudo apt install curl jq
+    - name: Download and unpack Verible
+      shell: bash
+      run: |
+          mkdir verible
+          if [ "${{ inputs.verible_version }}" = "latest" ]; then
+            VERIBLE_TARBALL=$(curl -fsSL https://api.github.com/repos/chipsalliance/verible/releases/latest | jq -r '.assets[] | select(.browser_download_url | test("(?=.*Ubuntu-20.04)(?=.*x86_64)")).browser_download_url')
+          else
+            VERIBLE_TARBALL="https://github.com/chipsalliance/verible/releases/download/${{ inputs.verible_version }}/verible-${{ inputs.verible_version }}-Ubuntu-20.04-focal-x86_64.tar.gz"
+          fi
+          echo "Downloading $VERIBLE_TARBALL"
+          curl -sS $VERIBLE_TARBALL | tar -zxvf - -C verible --strip-components=1
+          for i in ./verible/bin/*; do sudo cp $i /usr/local/bin/$(basename $i); done

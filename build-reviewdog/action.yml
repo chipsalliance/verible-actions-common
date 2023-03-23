@@ -1,0 +1,25 @@
+name: "Build reviewdog"
+description: "Build and run patched reviewdog version"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+          sudo apt install golang-go git
+    - name: Download reviewdog source code
+      shell: bash
+      run: |
+          git clone https://github.com/reviewdog/reviewdog
+          cd reviewdog
+          git checkout 72c205e138df049330f2a668c33782cda55d61f6
+    - name: Patch and build reviewdog
+      shell: bash
+      run: |
+          cd reviewdog
+          git apply ${{ github.action_path }}/reviewdog.patch
+          GOBIN=/usr/local/bin sudo go install ./cmd/reviewdog
+    - name: Check reviewdog version
+      shell: bash
+      run: reviewdog --version
