@@ -7,7 +7,6 @@ runs:
       shell: bash
     - name: Upload event file as artifact
       uses: actions/upload-artifact@v2
-      shell: bash
       with:
         name: event.json
         path: event.json
