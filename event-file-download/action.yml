@@ -8,7 +8,6 @@ runs:
     - name: 'Download artifact'
       id: get-artifacts
       uses: actions/github-script@v3.1.0
-      shell: bash
       with:
         script: |
           var artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -17,7 +16,7 @@ runs:
              run_id: ${{github.event.workflow_run.id }},
           });
           var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-            return artifact.name == "event.json"
+            return artifact.name == "verible-trigger.json"
           })[0];
           var download = await github.actions.downloadArtifact({
              owner: context.repo.owner,
@@ -26,7 +25,8 @@ runs:
              archive_format: 'zip',
           });
           var fs = require('fs');
-          fs.writeFileSync('${{github.workspace}}/event.json.zip', Buffer.from(download.data));
+          fs.writeFileSync('${{github.workspace}}/verible-trigger.json.zip', Buffer.from(download.data));
     - run: |
       shell: bash
-        unzip event.json.zip
+        unzip verible-trigger.json.zip
+        mv verible-trigger.json event.json

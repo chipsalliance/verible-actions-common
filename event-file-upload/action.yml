@@ -3,10 +3,10 @@ description: "Upload GitHub Event file to artifacts"
 runs:
   using: "composite"
   steps:
-    - run: cp "$GITHUB_EVENT_PATH" ./event.json
+    - run: cp "$GITHUB_EVENT_PATH" ./verible-trigger.json
       shell: bash
     - name: Upload event file as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: event.json
-        path: event.json
+        name: verible-trigger.json
+        path: verible-trigger.json
