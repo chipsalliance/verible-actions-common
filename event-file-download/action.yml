@@ -4,7 +4,6 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
-      shell: bash
     - name: 'Download artifact'
       id: get-artifacts
       uses: actions/github-script@v3.1.0
