@@ -60,7 +60,7 @@ index 46971d1..def780d 100644
  // Actions and running for PullRequests from forked repository with read-only token.
  // https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull_request_target
 diff --git a/cmd/reviewdog/main.go b/cmd/reviewdog/main.go
-index 3d1da39..b65c610 100644
+index 3d1da39..d25ddcc 100644
 --- a/cmd/reviewdog/main.go
 +++ b/cmd/reviewdog/main.go
 @@ -227,6 +227,7 @@ func main() {
@@ -117,37 +117,28 @@ index 3d1da39..b65c610 100644
  		ds = gs
  	case "gitlab-mr-discussion":
  		build, cli, err := gitlabBuildWithClient()
-@@ -389,7 +401,7 @@ github-pr-check reporter as a fallback.
- 	if err != nil {
- 		return err
- 	}
--
-+        
- 	app := reviewdog.NewReviewdog(toolName(opt), p, cs, ds, opt.filterMode, opt.failOnError)
- 	return app.Run(ctx, r)
- }
 diff --git a/reviewdog.go b/reviewdog.go
-index 2174610..1ad6558 100644
+index 2174610..c63e40b 100644
 --- a/reviewdog.go
 +++ b/reviewdog.go
-@@ -69,9 +69,10 @@ func (w *Reviewdog) runFromResult(ctx context.Context, results []*rdf.Diagnostic
+@@ -69,9 +69,11 @@ func (w *Reviewdog) runFromResult(ctx context.Context, results []*rdf.Diagnostic
  
  	checks := filter.FilterCheck(results, filediffs, strip, wd, w.filterMode)
  	hasViolations := false
 -
--	for _, check := range checks {
-+        fmt.Println("Posting results")
-+	for i, check := range checks {
++	fmt.Println("Posting results")
+ 	for _, check := range checks {
  		if !check.ShouldReport {
-+                        fmt.Println("Not reporting ", i, "th check:  ", check)
++			//fmt.Println("::warning ", "file=", check.Diagnostic.Location.Path, ",line=", check.Diagnostic.Location.Range.Start.Line,
++			//	",col=", check.Diagnostic.Location.Range.Start.Column, "::", check.Diagnostic.Message)
  			continue
  		}
  		comment := &Comment{
-@@ -79,6 +80,7 @@ func (w *Reviewdog) runFromResult(ctx context.Context, results []*rdf.Diagnostic
+@@ -79,6 +81,7 @@ func (w *Reviewdog) runFromResult(ctx context.Context, results []*rdf.Diagnostic
  			ToolName: w.toolname,
  		}
  		if err := w.c.Post(ctx, comment); err != nil {
-+                        fmt.Println("ERROR posting comment: ", err)
++                        fmt.Println("::error::posting comment: ", err)
  			return err
  		}
  		hasViolations = true
