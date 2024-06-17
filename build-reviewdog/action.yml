@@ -7,7 +7,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-          sudo apt install golang-go git
+          sudo apt install -y golang-go git
     - name: Download reviewdog source code
       shell: bash
       run: |

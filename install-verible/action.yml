@@ -15,7 +15,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-          sudo apt install curl jq wget
+          sudo apt install -y curl jq wget
     - name: Download and unpack Verible
       shell: bash
       run: |
