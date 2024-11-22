@@ -21,12 +21,12 @@ runs:
       run: |
           set -eo pipefail
           mkdir verible
-          if [[ ! -z "${{ inputs.github_token }}" ]]; then
+          if [[ -n "${{ inputs.github_token }}" ]]; then
             _HEADER=(--header 'authorization: Bearer ${{ inputs.github_token }}')
           else
             _HEADER=()
           fi
-          if [ "${{ inputs.verible_version }}" = "latest" ]; then
+          if [[ "${{ inputs.verible_version }}" == "latest" ]]; then
             VERIBLE_RELEASES_JSON=$(curl "${_HEADER[@]}" -fsSL https://api.github.com/repos/chipsalliance/verible/releases/latest)
             VERIBLE_TARBALL=$(echo $VERIBLE_RELEASES_JSON | jq -r '.assets[] | select(.browser_download_url | test("(?=.*linux-static)(?=.*x86_64)")).browser_download_url')
           else
