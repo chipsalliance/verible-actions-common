@@ -13,7 +13,7 @@ runs:
       run: |
           git clone https://github.com/reviewdog/reviewdog
           cd reviewdog
-          git checkout 72c205e138df049330f2a668c33782cda55d61f6
+          git checkout fd59714416d6d9a1c0692d872e38e7f8448df4fc # v0.20.3
     - name: Patch and build reviewdog
       shell: bash
       run: |
